@@ -1,0 +1,26 @@
+paths:
+  data_dir: ./data
+  raw_dir: ./data/raw
+  chunk_dir: ./data/chunks
+
+slack:
+  bot_token: "xoxb-..."     # 봇 토큰
+  user_token: null          # 필요 시 xoxp-... (없으면 null)
+
+openai:
+  openai_api_key: null
+  relevant_judge_model: "gpt-4o"
+  tag_model: "gpt-4o-mini"
+  temperature: 0.0
+
+postgresql:
+  user_name: username
+  password: password
+  host: localhost
+  port: 5432
+  db_name: database_name
+
+embedding:
+  emb_model_name: "BAAI/bge-m3"
+  device: "cpu" # cuda or cpu
+
