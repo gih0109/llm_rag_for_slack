@@ -113,18 +113,18 @@ def iter_chunks_from_json(
         default_channel: str | None = None, 
         merge_short_msg: bool = False, 
         merge_window_sec: int | None = 300, 
-        min_msg_len: int = 20
+        merge_msg_len: int = 20
     ):
     """
     JSON에서 메시지 단위 청킹.
-    merge_short=True면 같은 사용자 & merge_window_sec 이내 min_len 이하 단문을 이전 메시지에 붙인다.
+    merge_short=True면 같은 사용자 & merge_window_sec 이내 merge_msg_len 이하 단문을 이전 메시지에 붙인다.
 
     Args:
         - path (str) : slack message json 경로
         - default_channel (Optional, str) : 현재 채널, default=None
         - merge_short_msg (bool) : 단문을 이전 메세지에 붙일지 결정, default=False
         - merge_window_sec (int) : 단문을 이전 메세지에 붙일 시 임계 시간(초), default=300
-        - min_msg_len (int) : 단문 판별 문자열 길이
+        - merge_msg_len (int) : 단문 판별 문자열 길이
 
     Returns:
         - message (str) : 메세지 텍스트
@@ -140,7 +140,7 @@ def iter_chunks_from_json(
             if not text:
                 continue
 
-            if merge_short_msg and len(text) < min_msg_len and prev:
+            if merge_short_msg and len(text) < merge_msg_len and prev:
                 ts_cur = float(metadata.get("ts", "0"))
                 ts_prev = float(prev["metadata"].get("ts", "0"))
 
