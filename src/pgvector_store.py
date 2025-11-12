@@ -6,11 +6,16 @@ from .config import PG_CONN, PG_URL
 from .embeddings import get_embeddings
 
 
-def make_pgvector(collection_name: str, user_jsonb: bool = False):
+def make_pgvector(
+        emb_model_name: str, 
+        emb_model_device: str, 
+        collection_name: str, 
+        user_jsonb: bool = False
+    ):
     """
     pgvector 생성기
     """
-    embeddings = get_embeddings()
+    embeddings = get_embeddings(emb_model_name, device=emb_model_device)
     return PGVector(
         connection=PG_CONN,
         embeddings=embeddings,
@@ -99,7 +104,7 @@ def add_documents_stream_pgvector(
                 doc_metadata = metadata
                 doc_metadata["tag"] = ",".join(tag_list)
 
-                primary_key = f"{channel_name}|{prev_thread_id_list[0]}"
+                primary_key = f"{channel_name}|{prev_thread_ts_list[0]}"
                 # thread_db[primary_key] = relevant_text
                 
                 # make docs
@@ -118,14 +123,14 @@ def add_documents_stream_pgvector(
                 # 초기화
                 relevant_msg_list = [(text, metadata)]
                 # prev_thread_id 갱신
-                prev_thread_id_list = [thread_id]
+                prev_thread_ts_list = [thread_id]
 
             else:
                 relevant_msg_list.append((text, metadata))
-                prev_thread_id_list.append(thread_id)
+                prev_thread_ts_list.append(thread_id)
 
         else:
             relevant_msg_list.append((text, metadata))
-            if len(prev_thread_id_list) == 0:
-                prev_thread_id_list = [thread_id]
+            if len(prev_thread_ts_list) == 0:
+                prev_thread_ts_list = [thread_id]
 

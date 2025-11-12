@@ -1,6 +1,6 @@
 from pathlib import Path
 import os
-from typing import Optional
+from typing import Optional, Literal
 
 from src.config import (
     # RAW_DIR, 
@@ -13,6 +13,8 @@ from src.config import (
     MERGE_MSG,
     MERGE_MSG_LEN,
     MERGE_MSG_WINDOW,
+    EMB_MODEL_NAME,
+    DEVICE,
 )
 
 from src.slack_json2chunk import iter_chunks_from_json
@@ -34,6 +36,8 @@ def make_slack_pgvector(
         judge_chain_model_name: str,
         tag_chain_model_name: str,
         llm_temperature: float,
+        emb_model_name: str,
+        emb_device: Literal["cpu", "cuda"],
         pgvector_use_jsonb: bool = True
     ):
     # build chain
@@ -45,16 +49,22 @@ def make_slack_pgvector(
         llm_model_name=tag_chain_model_name,
         llm_model_temp=llm_temperature,
     )
+    print("building chain success")
 
     # pgvector
     relevant_vectorstore = make_pgvector(
+        emb_model_name=emb_model_name,
+        emb_model_device=emb_device,
         collection_name=channel_name,
         user_jsonb=pgvector_use_jsonb,
     )
     tag_vectorstore = make_pgvector(
+        emb_model_name=emb_model_name,
+        emb_model_device=emb_device,
         collection_name="tag",
         user_jsonb=pgvector_use_jsonb,
     )
+    print("pgvector connected")
 
     # make chunk iterator
     chunk_iter = iter_chunks_from_json(
@@ -65,6 +75,7 @@ def make_slack_pgvector(
         merge_msg_len=merge_msg_len,
     )
 
+    print("starting add document stream")
     # save data to pgvetor
     add_documents_stream_pgvector(
         judge_relevant_chain=judge_chain,
@@ -74,6 +85,8 @@ def make_slack_pgvector(
         relevant_vectorstore=relevant_vectorstore,
         tag_vectorstore=tag_vectorstore
     )
+
+    print("finished")
 
 
 def main():
@@ -87,6 +100,8 @@ def main():
         merge_msg_window_sec=MERGE_MSG_WINDOW,
         judge_chain_model_name=RELEVANT_JUDGE_MODEL,
         tag_chain_model_name=TAG_MODEL,
+        emb_model_name=EMB_MODEL_NAME,
+        emb_device=DEVICE,
         llm_temperature=TEMPERATURE,
     )
 

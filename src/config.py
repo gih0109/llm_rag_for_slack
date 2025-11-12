@@ -6,7 +6,7 @@ from typing import Optional
 import yaml
 
 
-DEFAURT_CONFIG_PATH = Path("./config.yaml")
+DEFAURT_CONFIG_PATH = Path("./test_config.yaml")
 
 
 def _load_yaml(yaml_path: str) -> dict:
@@ -53,7 +53,7 @@ user_name = postgresql_cfg.get("user_name")
 password = postgresql_cfg.get("password")
 host = postgresql_cfg.get("host")
 port = postgresql_cfg.get("port")
-db_name = postgresql_cfg.get("database_name")
+db_name = postgresql_cfg.get("db_name")
 PG_CONN = f"postgresql+psycopg://{user_name}:{password}@{host}:{port}/{db_name}"
 PG_URL = f"postgresql://{user_name}:{password}@{host}:{port}/{db_name}"
 
