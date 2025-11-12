@@ -29,11 +29,14 @@ slack_cfg = cfg.get("slack", {})
 openai_cfg = cfg.get("openai", {})
 postgresql_cfg = cfg.get("postgresql", {})
 embedding_cfg = cfg.get("embedding", {})
+chunk_cfg = cfg.get("chunk", {})
 
 # 경로
-DATA_DIR = paths_cfg.get("data_dir")
-RAW_DIR = paths_cfg.get("raw_dir")
-CHUNK_DIR = paths_cfg.get("chunk_dir")
+# DATA_DIR = paths_cfg.get("data_dir")
+# RAW_DIR = paths_cfg.get("raw_dir")
+# CHUNK_DIR = paths_cfg.get("chunk_dir")
+CHANNEL_NAME = paths_cfg.get("channel_name")
+SLACK_JSON_PATH = paths_cfg.get("slack_json_path")
 
 # slack
 SLACK_BOT_TOKEN = slack_cfg.get("bot_token")
@@ -57,6 +60,11 @@ PG_URL = f"postgresql://{user_name}:{password}@{host}:{port}/{db_name}"
 # embedding
 EMB_MODEL_NAME = embedding_cfg.get("emb_model_name")
 DEVICE = embedding_cfg.get("device")
+
+# chunk
+MERGE_MSG = chunk_cfg.get("merge_short_msg")
+MERGE_MSG_LEN = chunk_cfg.get("merge_msg_len")
+MERGE_MSG_WINDOW = chunk_cfg.get("merge_msg_window_sec")
 
 
 

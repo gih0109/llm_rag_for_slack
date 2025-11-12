@@ -1,7 +1,6 @@
 paths:
-  data_dir: ./data
-  raw_dir: ./data/raw
-  chunk_dir: ./data/chunks
+  channel_name: "test_channel"
+  slack_json_path: ./data/test.json
 
 slack:
   bot_token: "xoxb-..."     # 봇 토큰
@@ -23,4 +22,9 @@ postgresql:
 embedding:
   emb_model_name: "BAAI/bge-m3"
   device: "cpu" # cuda or cpu
+
+chunk:
+  merge_short_msg: True
+  merge_msg_len: 200
+  merge_msg_window_sec: 300
 
